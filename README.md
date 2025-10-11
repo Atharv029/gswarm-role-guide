@@ -6,8 +6,11 @@ All-in-one script that installs the GSwarm CLI tool, starts monitoring Gensyn Sw
 
 Run the following command:
 
-``
-bash <(curl -sL https://raw.githubusercontent.com/CodeDialect/gswarm-role/main/gswarm.sh)``
+````
+
+bash <(curl -sL https://raw.githubusercontent.com/CodeDialect/gswarm-role/main/gswarm.sh)
+
+````
 
 ## Setup Instructions
 
