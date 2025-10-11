@@ -8,7 +8,7 @@ Run the following command:
 
 ````
 
-curl -sL https://raw.githubusercontent.com/Atharv029/gswarm-role-guide/main/gswarmScript.sh | sed 's/\r$//' | bash
+ bash <(curl -sL https://raw.githubusercontent.com/Atharv029/gswarm-role-guide/main/gswarmScript.sh)
 
 ````
 
