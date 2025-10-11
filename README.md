@@ -25,7 +25,7 @@ Follow the Telegram bot setup prompts:
 
 ### 2. EOA Address
 
-Get your EOA address from the Gensyn dashboard(https://dashboard.gensyn.ai/).
+Get your EOA address from the Gensyn dashboard - https://dashboard.gensyn.ai
 
 ### 3. Configuration File
 
