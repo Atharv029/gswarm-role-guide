@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 # Colors
 CYAN='\033[0;36m'
 GREEN='\033[1;32m'
@@ -10,9 +11,6 @@ RESET='\033[0m'
 NC='\033[0m'
 BOLD='\033[1m'
 
-# ===============================
-# BANNER
-# ===============================
 echo -e "${PURPLE}${BOLD}"
 echo -e "${CYAN}
  
@@ -29,7 +27,6 @@ echo -e "${CYAN}
 ${RED}                      :: Powered by 0xShyron ::
 ${NC}"
 
-# === CONFIG ===
 GO_INSTALL_DIR="/usr/local"
 CONFIG_PATH="telegram-config.json"
 API_URL="https://gswarm.dev/api"
@@ -38,7 +35,6 @@ set -e
 
 echo "GSwarm Full One-Click Installer"
 
-# === Install jq ===
 if ! command -v jq >/dev/null 2>&1; then
   echo "Installing jq..."
   sudo apt update -y
@@ -47,14 +43,12 @@ else
   echo "jq is already installed"
 fi
 
-# === Fetch Latest Go Version ===
 echo "Fetching latest Go version..."
 GO_VERSION=$(curl -s https://go.dev/VERSION?m=text | head -n 1 | sed 's/go//')
 GO_TARBALL="go${GO_VERSION}.linux-amd64.tar.gz"
 GO_URL="https://golang.org/dl/${GO_TARBALL}"
 echo "Latest Go version: $GO_VERSION"
 
-# === Go Version Check & Install ===
 install_go() {
   echo "Installing Go $GO_VERSION..."
   curl -LO "$GO_URL"
@@ -86,15 +80,12 @@ else
   install_go
 fi
 
-# Source updated PATH
 export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
 
-# === Install GSwarm ===
 echo "Installing GSwarm CLI..."
 go install github.com/Deep-Commit/gswarm/cmd/gswarm@latest
 echo "GSwarm installed at: $(which gswarm)"
 
-# === Telegram Bot Setup ===
 echo
 echo "Telegram Bot Setup:"
 echo "1. Open Telegram and search @BotFather"
@@ -106,8 +97,7 @@ echo
 echo "Now send any message to your bot in Telegram."
 read -p "Press Enter after sending the message..."
 echo "Fetching your chat ID..."
-CHAT_ID=$(curl -s "https://api.telegram.org/bot${BOT_TOKEN}/getUpdates" \
-  | jq -r '.result[-1].message.chat.id')
+CHAT_ID=$(curl -s "https://api.telegram.org/bot${BOT_TOKEN}/getUpdates" | jq -r '.result[-1].message.chat.id')
 
 if [[ -z "$CHAT_ID" || "$CHAT_ID" == "null" ]]; then
   echo "Failed to retrieve chat ID. Did you message the bot first?"
@@ -126,7 +116,6 @@ EOF
 
 echo "Configuration saved to $CONFIG_PATH"
 
-# === Run GSwarm ===
 echo
 echo "Starting GSwarm monitor..."
 gswarm
