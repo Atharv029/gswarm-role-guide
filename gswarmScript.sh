@@ -27,13 +27,13 @@ echo -e "${CYAN}
                                                                                                                                 
 ${RED}                      :: Powered by 0xShyron ::
 ${NC}"
-# === CONFIG ===
+# CONFIG 
 GO_INSTALL_DIR="/usr/local"
 CONFIG_PATH="telegram-config.json"
 API_URL="https://gswarm.dev/api"
 set -e
 echo "GSwarm Full One-Click Installer"
-# === Install jq ===
+# Install jq 
 if ! command -v jq >/dev/null 2>&1; then
   echo "Installing jq..."
   sudo apt update -y
@@ -41,13 +41,13 @@ if ! command -v jq >/dev/null 2>&1; then
 else
   echo "jq is already installed"
 fi
-# === Fetch Latest Go Version ===
+# Fetch Latest Go Version 
 echo "Fetching latest Go version..."
 GO_VERSION=$(curl -s https://go.dev/VERSION?m=text | head -n 1 | sed 's/go//')
 GO_TARBALL="go${GO_VERSION}.linux-amd64.tar.gz"
 GO_URL="https://golang.org/dl/${GO_TARBALL}"
 echo "Latest Go version: $GO_VERSION"
-# === Go Version Check & Install ===
+# Go Version Check & Install 
 function install_go {
   echo "Installing Go $GO_VERSION..."
   curl -LO "$GO_URL"
@@ -78,11 +78,11 @@ else
 fi
 # Source updated PATH
 export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
-# === Install GSwarm ===
+#  Install GSwarm 
 echo "Installing GSwarm CLI..."
 go install github.com/Deep-Commit/gswarm/cmd/gswarm@latest
 echo "GSwarm installed at: $(which gswarm)"
-# === Telegram Bot Setup ===
+# Telegram Bot Setup 
 echo
 echo "Telegram Bot Setup:"
 echo "1. Open Telegram and search @BotFather"
@@ -110,7 +110,8 @@ cat > "$CONFIG_PATH" <<EOF
 }
 EOF
 echo "Configuration saved to $CONFIG_PATH"
-# === Run GSwarm ===
+# Run GSwarm 
 echo
 echo "Starting GSwarm monitor..."
+
 gswarm
