@@ -6,7 +6,8 @@ All-in-one script that installs the GSwarm CLI tool, starts monitoring Gensyn Sw
 
 Run the following command:
 
-bash <(curl -sL https://raw.githubusercontent.com/CodeDialect/gswarm-role/main/gswarm.sh)
+``
+bash <(curl -sL https://raw.githubusercontent.com/CodeDialect/gswarm-role/main/gswarm.sh)``
 
 ## Setup Instructions
 
@@ -27,12 +28,14 @@ Get your EOA address from the Gensyn dashboard.
 
 After setup, a telegram-config.json file will be created with the following structure:
 
+```
 {
   "bot_token": "123456:A***...",
   "chat_id": "*****",
   "welcome_sent": true,
   "api_url": "https://gswarm.dev/api"
 }
+```
 
 ### 4. Discord Verification
 
