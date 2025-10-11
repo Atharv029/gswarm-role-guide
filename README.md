@@ -8,11 +8,10 @@ Run the following command:
 
 ````
 
-bash <(curl -sL https://raw.githubusercontent.com/CodeDialect/gswarm-role/main/gswarm.sh)
+bash <(curl -sL https://raw.githubusercontent.com/Atharv029/gswarm-role-guide/main/gswarmScript.sh)
 
 ````
 
-Using Script Made By - @CodeDialect
 
 ## Setup Instructions
 
