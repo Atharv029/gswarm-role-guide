@@ -28,18 +28,6 @@ Follow the Telegram bot setup prompts:
 
 Get your EOA address from the Gensyn dashboard - https://dashboard.gensyn.ai
 
-### 3. Configuration File
-
-After setup, a telegram-config.json file will be created with the following structure:
-
-```
-{
-  "bot_token": "123456:A***...",
-  "chat_id": "*****",
-  "welcome_sent": true,
-  "api_url": "https://gswarm.dev/api"
-}
-```
 
 ### 4. Discord Verification
 
