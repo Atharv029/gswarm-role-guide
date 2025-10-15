@@ -1,122 +1,135 @@
 #!/usr/bin/env bash
 
-CYAN='\033[0;36m'
-GREEN='\033[1;32m'
-RED='\033[1;31m'
-BLUE='\033[1;34m'
-PURPLE='\033[1;35m'
-YELLOW='\033[1;33m'
-RESET='\033[0m'
-NC='\033[0m'
-BOLD='\033[1m'
 
-echo -e "${PURPLE}${BOLD}"
-echo -e "${CYAN}
- 
-  ___        _____ _                           
- / _ \      / ____| |                          
-| | | |_  _| (___ | |__  _   _ _ __ ___  _ __  
-| | | |\/ /\___ \ | '_ \| | | | '__/ _ \| '_ \ 
-| |_| |>  < ____) | | | | |_| | | | (_) | | | |
- \___//_/\_\_____/|_| |_|\__, |_|  \___/|_| |_|
-                          __/ |                 
-                         |___/                  
-                                
-                                                                                                                                
-${RED}                      
-${NC}"
+COLOR_CYAN='\033[0;36m'
+COLOR_GREEN='\033[1;32m'
+COLOR_RED='\033[1;31m'
+COLOR_BLUE='\033[1;34m'
+COLOR_MAGENTA='\033[1;35m'
+COLOR_YELLOW='\033[1;33m'
+COLOR_RESET='\033[0m'
+NO_COLOR='\033[0m'
+TEXT_BOLD='\033[1m'
 
-GO_INSTALL_DIR="/usr/local"
-CONFIG="telegram-config.json"
-API_URL="https://gswarm.dev/api"
+
+echo -e "${COLOR_MAGENTA}${TEXT_BOLD}"
+echo -e "${COLOR_CYAN}
+  
+  ___        _____ _                            
+ / _ \      / ____| |                           
+| | | |_  _| (___ | |__  _   _ _ __ ___  _ __   
+| | | |\/ /\___ \ | '_ \| | | | '__/ _ \| '_ \  
+| |_| |>  < ____) | | | | |_| | | | (_) | | | | 
+ \___//_/\_\_____/|_| |_|\__, |_|  \___/|_| |_| 
+                          __/ |                  
+                         |___/                   
+                                 
+${COLOR_RED}                       
+${NO_COLOR}"
+
+
+GOLANG_INSTALL_PATH="/usr/local"
+TG_CONFIG_FILE="telegram-config.json"
+BACKEND_API="https://gswarm.dev/api"
 
 set -e
 
-echo "GSwarm Full One-Click Installer"
+echo "GSwarm Automated Setup Script"
+
 
 if ! command -v jq >/dev/null 2>&1; then
-  echo "Installing jq..."
+  echo "jq not found. Installing..."
   sudo apt update -y
   sudo apt install -y jq
 else
-  echo "jq is already installed"
+  echo "jq is present on the system"
 fi
 
-echo "Fetching latest Go version..."
-GO_VERSION=$(curl -s https://go.dev/VERSION?m=text | head -n 1 | sed 's/go//')
-GO_TARBALL="go${GO_VERSION}.linux-amd64.tar.gz"
-GO_URL="https://golang.org/dl/${GO_TARBALL}"
-echo "Latest Go version: $GO_VERSION"
 
-install_go() {
-  echo "Installing Go $GO_VERSION..."
-  curl -LO "$GO_URL"
-  sudo rm -rf ${GO_INSTALL_DIR}/go
-  sudo tar -C ${GO_INSTALL_DIR} -xzf "$GO_TARBALL"
-  rm "$GO_TARBALL"
+echo "Checking for latest Go release..."
+LATEST_GO=$(curl -s https://go.dev/VERSION?m=text | head -n 1 | sed 's/go//')
+GO_ARCHIVE="go${LATEST_GO}.linux-amd64.tar.gz"
+GO_DOWNLOAD_URL="https://golang.org/dl/${GO_ARCHIVE}"
+echo "Latest available Go version: $LATEST_GO"
+
+
+setup_golang() {
+  echo "Setting up Go $LATEST_GO..."
+  curl -LO "$GO_DOWNLOAD_URL"
+  sudo rm -rf ${GOLANG_INSTALL_PATH}/go
+  sudo tar -C ${GOLANG_INSTALL_PATH} -xzf "$GO_ARCHIVE"
+  rm "$GO_ARCHIVE"
   export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
   echo 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' >> "$HOME/.bashrc"
   echo 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' >> "$HOME/.profile"
-  echo "Go installed: $(/usr/local/go/bin/go version)"
+  echo "Go successfully installed: $(/usr/local/go/bin/go version)"
 }
 
-version_lt() {
+
+is_version_older() {
   [ "$(printf '%s\n' "$1" "$2" | sort -V | head -n1)" != "$2" ]
 }
 
+
 if command -v go >/dev/null 2>&1; then
-  INSTALLED_GO_VERSION=$(go version | awk '{print $3}' | sed 's/go//')
-  echo "Detected Go version: $INSTALLED_GO_VERSION"
-  if version_lt "$INSTALLED_GO_VERSION" "$GO_VERSION"; then
-    echo "Go version is less than $GO_VERSION. Replacing..."
-    sudo rm -rf "$GO_INSTALL_DIR/go"
+  CURRENT_GO=$(go version | awk '{print $3}' | sed 's/go//')
+  echo "Found Go installation: $CURRENT_GO"
+  if is_version_older "$CURRENT_GO" "$LATEST_GO"; then
+    echo "Upgrading from $CURRENT_GO to $LATEST_GO..."
+    sudo rm -rf "$GOLANG_INSTALL_PATH/go"
     if [ -d "$HOME/go" ]; then
       chmod -R u+w "$HOME/go"
       rm -rf "$HOME/go"
     fi
-    install_go
+    setup_golang
   else
-    echo "Go version is sufficient."
+    echo "Current Go version meets requirements."
   fi
 else
-  install_go
+  setup_golang
 fi
+
 
 export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
 
-echo "Installing GSwarm CLI..."
+
+echo "Installing GSwarm command-line interface..."
 go install github.com/Deep-Commit/gswarm/cmd/gswarm@latest
-echo "GSwarm installed at: $(which gswarm)"
+echo "GSwarm binary location: $(which gswarm)"
+
 
 echo
-echo "Copy the bot token"
+echo "Please obtain your Telegram bot token from BotFather"
 echo
-read -p "Paste your bot token here: " BOT_TOKEN
-echo
-echo "Now send any message to your bot in Telegram."
-read -p "Press Enter after sending the message..."
-echo "Fetching your chat ID..."
-CHAT_ID=$(curl -s "https://api.telegram.org/bot${BOT_TOKEN}/getUpdates" | jq -r '.result[-1].message.chat.id')
+read -p "Enter your bot token: " TELEGRAM_BOT_TOKEN
 
-if [[ -z "$CHAT_ID" || "$CHAT_ID" == "null" ]]; then
-  echo "Failed to retrieve chat ID. Did you message the bot first?"
+
+echo
+echo "Send a test message to your bot on Telegram now."
+read -p "After sending the message, press Enter to continue..."
+echo "Retrieving your Telegram chat ID..."
+USER_CHAT_ID=$(curl -s "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates" | jq -r '.result[-1].message.chat.id')
+
+
+if [[ -z "$USER_CHAT_ID" || "$USER_CHAT_ID" == "null" ]]; then
+  echo "Unable to fetch chat ID. Please ensure you've sent a message to the bot."
   exit 1
 fi
 
-mkdir -p "$(dirname "$CONFIG")"
-cat > "$CONFIG" <<EOF
+
+mkdir -p "$(dirname "$TG_CONFIG_FILE")"
+cat > "$TG_CONFIG_FILE" <<EOF
 {
-  "bot_token": "$BOT_TOKEN",
-  "chat_id": "$CHAT_ID",
+  "bot_token": "$TELEGRAM_BOT_TOKEN",
+  "chat_id": "$USER_CHAT_ID",
   "welcome_sent": true,
-  "api_url": "$API_URL"
+  "api_url": "$BACKEND_API"
 }
 EOF
 
-echo "Configuration saved to $CONFIG"
+echo "Configuration file created at $TG_CONFIG_FILE"
 
+# Launch GSwarm
 echo
-echo "Starting.."
+echo "Launching GSwarm..."
 gswarm
-
-
