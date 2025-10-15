@@ -23,11 +23,11 @@ echo -e "${CYAN}
                          |___/                  
                                 
                                                                                                                                 
-${RED}                      :: Powered by 0xShyron ::
+${RED}                      
 ${NC}"
 
 GO_INSTALL_DIR="/usr/local"
-CONFIG_PATH="telegram-config.json"
+CONFIG="telegram-config.json"
 API_URL="https://gswarm.dev/api"
 
 set -e
@@ -89,10 +89,7 @@ go install github.com/Deep-Commit/gswarm/cmd/gswarm@latest
 echo "GSwarm installed at: $(which gswarm)"
 
 echo
-echo "Telegram Bot Setup:"
-echo "1. Open Telegram and search @BotFather"
-echo "2. Send /newbot and follow the steps"
-echo "3. Copy the bot token (format: 123456:ABC-DEF...)"
+echo "Copy the bot token"
 echo
 read -p "Paste your bot token here: " BOT_TOKEN
 echo
@@ -106,8 +103,8 @@ if [[ -z "$CHAT_ID" || "$CHAT_ID" == "null" ]]; then
   exit 1
 fi
 
-mkdir -p "$(dirname "$CONFIG_PATH")"
-cat > "$CONFIG_PATH" <<EOF
+mkdir -p "$(dirname "$CONFIG")"
+cat > "$CONFIG" <<EOF
 {
   "bot_token": "$BOT_TOKEN",
   "chat_id": "$CHAT_ID",
@@ -116,9 +113,10 @@ cat > "$CONFIG_PATH" <<EOF
 }
 EOF
 
-echo "Configuration saved to $CONFIG_PATH"
+echo "Configuration saved to $CONFIG"
 
 echo
-echo "Starting GSwarm monitor..."
+echo "Starting.."
 gswarm
+
 
