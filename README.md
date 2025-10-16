@@ -47,22 +47,8 @@ gswarm --version
 
 ### Retrieve Your Chat ID
 
-1. Start a conversation with your newly created bot and send a test message
-2. Open your web browser and navigate to:
-   ```
-   https://api.telegram.org/botYOUR_BOT_TOKEN/getUpdates
-   ```
-   
-   **Important:** Replace `YOUR_BOT_TOKEN` with your actual bot token. Ensure the word `bot` remains in the URL before the token.
-
-   **Example:** If your bot token is `1234567890:ABCdefGHIjklMNOpqrsTUVwxyz`, the URL should be:
-   ```
-   https://api.telegram.org/bot1234567890:ABCdefGHIjklMNOpqrsTUVwxyz/getUpdates
-   ```
-
-3. Enable pretty-print in your browser for improved readability
-
-4. Locate your chat ID in the response
+1. Go to @userinfobot
+2. send any message you will get your chat id
 
 **Sample Response:**
 ```json
