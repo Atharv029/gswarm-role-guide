@@ -50,41 +50,6 @@ gswarm --version
 1. Go to @userinfobot
 2. send any message you will get your chat id
 
-**Sample Response:**
-```json
-{
-  "ok": true,
-  "result": [
-    {
-      "message": {
-        "message_id": 2001,
-        "from": {
-          "id": 123445789,
-          "is_bot": false,
-          "first_name": "GSwarm",
-          "username": "gswarm0",
-          "language_code": "en"
-        },
-        "chat": {
-          "id": 123456789,
-          "first_name": "GSwarm",
-          "username": "gswarm0",
-          "type": "private"
-        },
-        "date": 1704067200,
-        "text": "Hello bot!"
-      }
-    }
-  ]
-}
-```
-
-**Extract the Chat ID:** Locate the `"chat":{"id":123456789}` field. In this example, the chat ID is `123456789`. This identifier will be used by the bot to send notifications.
-
-**Note:** If the response shows an empty result `{"ok":true,"result":[]}`, send a message to your bot first, then refresh the URL.
-
----
-
 ## Step 3: Run Gswarm Bot
 
 Execute the following command in your terminal:
