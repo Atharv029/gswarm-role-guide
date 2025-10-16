@@ -109,7 +109,7 @@ gswarm
 Follow the prompts to enter:
 - Bot token
 - Chat ID
-- EOA address (available from the Gensyn Dashboard)
+- EOA address (available from the Gensyn Dashboard) link - https://dashboard.gensyn.ai/
 
 ---
 
