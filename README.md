@@ -1,44 +1,100 @@
-# GSWARM ROLE GUIDE
+Gswarm Role Guide
 
-All-in-one script that installs the GSwarm CLI tool, starts monitoring Gensyn Swarm rewards automatically, and sets up a Telegram bot for notifications.
+Guide to setup the tg moinotring bot for our gensyn node and get the gswarm role
 
-## Quick Start
 
-Run the following command:
+Step 1. Install Gswarm
+````
+
+# Install Go:
+sudo rm -rf /usr/local/go
+curl -L https://go.dev/dl/go1.22.4.linux-amd64.tar.gz | sudo tar -xzf - -C /usr/local
+echo 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' >> $HOME/.bash_profile
+echo 'export PATH=$PATH:$(go env GOPATH)/bin' >> $HOME/.bash_profile
+source .bash_profile
+go version
+
+````
+````
+go install github.com/Deep-Commit/gswarm/cmd/gswarm@latest
 
 ````
 
-bash <(curl -sL https://raw.githubusercontent.com/Atharv029/gswarm-role-guide/main/gswarmScript.sh | sed 's/\r$//')
+Verify Installation
+```` gswarm --version ````
 
+Step 2. Setup Telegram Bot
+1. Create a Telegram Bot:
+
+Chat with @BotFather on Telegram
+Send /newbot and follow the instructions (Choose a name & username)
+Save the bot token provided
+
+2. Get Your Chat ID:
+
+Start a chat with your new bot and send some messages to it
+
+Visit ``` https://api.telegram.org/botYOUR_BOT_TOKEN/getUpdates ``` in your browser
+Replace <YOUR_BOT_TOKEN> with your actual bot token.
+
+Ensure the word bot remains in the URL before the token.
+
+Find your chat ID in the response
+
+Example: If your bot token is 1234567890:ABCdefGHIjklMNOpqrsTUVwxyz, visit:
+``` https://api.telegram.org/bot1234567890:ABCdefGHIjklMNOpqrsTUVwxyz/getUpdates ```
+
+In your Browser, enable Pretty-print for better readability.
+Sample Response:
 ````
 
+{
+  "ok": true,
+  "result": [
+    {
+      "message": {
+        "message_id": 2001,
+        "from": {
+          "id": 123445789,
+          "is_bot": false,
+          "first_name": "GSwarm",
+          "username": "gswarm0",
+          "language_code": "en"
+        },
+        "chat": {
+          "id": 123456789,
+          "first_name": "GSwarm",
+          "username": "gswarm0",
+          "type": "private"
+        },
+        "date": 1704067200,
+        "text": "Hello bot!"
+      }
+    }
+  ]
+}
 
-## Setup Instructions
+````
+Extract the Chat ID: Look for the "chat":{"id":123456789} field. In this example, the chat ID is 123456789. This is your Telegram ID that the bot will use to send you notifications.
+Note: If you get an empty result {"ok":true,"result":[]}, you may need to send a message to your bot first, then refresh the URL.
 
-### 1. Telegram Bot Configuration
+Step 3. Run Gswarm Bot
+Run  ``` gswarm ``` in your terminal now and follow the prompts to enter your bot token, chat ID, and EOA address
 
-Follow the Telegram bot setup prompts:
-
-- Create a new bot using @BotFather
-- Paste your bot token when prompted
-- Disable privacy mode by sending /setprivacy command to @BotFather
-- Send a message to your bot so the script can fetch your chat ID
-
-### 2. EOA Address
-
-Get your EOA address from the Gensyn dashboard - https://dashboard.gensyn.ai
+You'll find EOA address by logging in the Gensyn Dashboard
 
 
-### 4. Discord Verification
+Step 4. Linking Discord and Telegram
 
-Complete the verification process:
+To link your Discord and Telegram accounts:
 
-- Navigate to the Gensyn Discord server
-- Go to the swarm-link channel
-- Execute the /link-telegram command
-- Copy the verification code provided
-- Return to your Telegram bot
-- Send the verification command: /verify verificationCode
-- Replace verificationCode with the code copied from Discord
+1. Get the verification code:
 
-Setup complete.
+Go to Discord in #|swarm-link channel
+Type /link-telegram (this gives you a code)
+
+2. Verify the code:
+
+Go to your Telegram bot
+Type /verify <code> (replace <code> with the code you received)
+This will link your Discord and Telegram accounts and you earn The Swarm role.
